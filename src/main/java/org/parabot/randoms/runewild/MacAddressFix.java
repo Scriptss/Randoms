@@ -25,42 +25,24 @@ public class MacAddressFix implements Random {
     @Override
     public void execute() {
         try {
+            
+            System.out.println("changing mac");
             final ASMClassLoader classLoader = Context.getInstance().getASMClassLoader();
 
             RefClass createUID = new RefClass(classLoader.loadClass("com.rw.client.rs.CreateUID"));
-
-
-            try {
-                Logger.info("MacAddressFix_RW", String.format(
-                        "Before applying MAC override : %s | %s | %s",
-                        createUID.getField("mac").getField().get(""),
-                        createUID.getField("firstId").getField().get(""),
-                        createUID.getField("secondId").getField().get("")));
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-
-            String s1 = UUID.randomUUID().toString();
-            String s2 = UUID.randomUUID().toString();
-
             RefField mac = createUID.getField("mac");
             mac.set("lolmkay");
 
-            RefField firstId = createUID.getField("firstId");
+            RefClass animHandler = new RefClass(classLoader.loadClass("com.rw.client.rs.AnimationHandler"));
+            String s1 = UUID.randomUUID().toString();
+            String s2 = UUID.randomUUID().toString();
+            RefField firstId = animHandler.getField("firstId");
             firstId.set(s1);
-
-            RefField secondId = createUID.getField("secondId");
+            RefField secondId = animHandler.getField("secondId");
             secondId.set(s2);
-            try {
-                Logger.info("MacAddressFix_RW", String.format(
-                        "Applied MAC override : %s | %s | %s",
-                        mac.getField().get(""),
-                        firstId.getField().get(""),
-                        secondId.getField().get("")));
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-                Logger.error("Macfix RW", e.getMessage());
-            }
+            System.out.println("done changing mac");
+            
+            
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
